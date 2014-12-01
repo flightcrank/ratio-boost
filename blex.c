@@ -9,9 +9,39 @@ struct token {
 	struct token *next;
 };
 
-int create_token(size_t token_size) {
-	
-	return 0;
+struct token start = {"start", NULL};
+struct token *current = NULL;
+
+void add_token(char type[]) {
+
+	//go to last element
+	while (1) {
+		
+		//linked list is empty
+		if (current == NULL) {
+		
+			//set first elemnt in linked list
+			strcpy(start.type, type);
+			start.next = NULL;
+			current = &start;
+			break;
+		}
+
+		//last element found
+		if (current->next == NULL) {
+			
+			//allocate memory for a new token structure
+			current->next = malloc(sizeof(struct token));
+			
+			//switch to the new element
+			current = current->next;
+			
+			//add data to that new token structure
+			strcpy(current->type, type);
+			current->next = NULL;
+			break;
+		}
+	}
 }
 
 int main() {
@@ -29,7 +59,7 @@ int main() {
 	}
 
 	char str_len[10]; 	// maximum of nine numbers
-	char str_value[255];	// actual string 
+	char str_value[256];	// actual string 
 	int num_index = 0;	
 	int c = fgetc(file);
 	
@@ -38,11 +68,11 @@ int main() {
 	
 		int pos = ftell(file);
 		
-		//printf("%d\n", pos);
-
-		if (pos > 226) {
+		//end token found
+		if (c == 'e') {
 			
-			break;
+			printf("END (%d)\n", pos );
+			add_token("END");
 		}
 
 		//number token found
@@ -53,6 +83,7 @@ int main() {
 		}
 
 		//end of string length number reached
+		//begining of string starts at the next char
 		if (c == ':') {
 			
 			//add null byte to string length
@@ -63,6 +94,15 @@ int main() {
 
 			int len = atoi(str_len);
 			int i = 0;
+
+			//to big to put in our max string, dont try to write to the string
+			//to avoid a segfault
+			if (len > 255) {
+				
+				//skip over this data
+				fseek(file, len, SEEK_CUR);
+				continue;
+			}
 
 			//continue to read (str_len) number of chars into a string
 			for (i = 0; i <= len; i++) {
@@ -78,19 +118,13 @@ int main() {
 				str_value[i] = c;
 			}
 
-			printf("%s\n", str_value);
-		}
-		
-		//end  token found
-		if (c == 'e') {
-			
-			puts("End last Integer, List or Dictionary");
+			printf("String \"%s\" (%d) \n", str_value, pos + 1);
 		}
 
 		//integer token found
 		if (c == 'i') {
 			
-			puts("Integer");
+			printf("Integer (%d)\n", pos);
 			
 			num_index = 0;
 			c = fgetc(file);
@@ -105,14 +139,20 @@ int main() {
 			str_len[num_index] = '\0';
 			num_index = 0;
 
-			printf("%s\n", str_len);
+			printf("%s (%d)\n", str_len, pos + 1);
 			continue;
 		}
 
 		//dictionary token found
 		if (c == 'd') {
 		
-			puts("Dictionary");
+			printf("Dictionary (%d)\n", pos );
+		}
+		
+		//list token found
+		if (c == 'l') {
+		
+			printf("List (%d)\n", pos );
 		}
 
 		c = fgetc(file);
