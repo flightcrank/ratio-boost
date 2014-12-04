@@ -2,103 +2,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "list.h"
 
-struct token {
-	
-	char type[32];
-	int pos;
-	struct token *next;
-};
-
-struct token *start = NULL;
-struct token *current = NULL;
-
-void remove_last_element() {
-	
-	current = start;
-	struct token *prev = NULL;
-
-	while(1) {
-		
-		//nothing in list at all
-		if (current == NULL) {
-			
-			break;
-		}
-
-		//skip over all elements in the linked list
-		if(current->next != NULL) {
-			
-			prev = current;
-			current = current->next;
-		
-		//last element found
-		} else {
-
-			printf("type = %s @ pos = %d\n", current->type, current->pos);
-
-			//remove last elemnt
-			free(current);
-
-			//set previous element to be the new last element
-			if (prev != NULL) {
-				
-				current = prev;
-				current->next = NULL;
-				break;
-			
-			//prev was never set, meaning we were at the first element with no other elements linked to it
-			} else {
-			
-				break;
-			}
-		}
-	}
-}
-
-void add_element(char type[], int pos) {
-
-	current = start;
-	
-	//go to last element
-	while (1) {
-		
-		//special case: linked list is empty
-		if (current == NULL) {
-		
-			//set first element in linked list
-			start = malloc(sizeof(struct token));
-			strcpy(start->type, type);
-			start->pos = pos;
-			start->next = NULL;
-			current = start;
-			break;
-		}
-
-		//skip over all elements in the linked list
-		if(current->next != NULL) {
-			
-			current = current->next; 
-		
-		//last element found
-		} else {
-			
-			//allocate memory for a new token structure
-			current->next = malloc(sizeof(struct token));
-			
-			//switch to the new element
-			current = current->next;
-			
-			//add data to that new token structure
-			strcpy(current->type, type);
-			current->pos = pos;
-			current->next = NULL;
-			break;
-		}
-	}
-}
 
 int main() {
+	
+	struct element *list = create_list();
 	
 	FILE *file;
 	
@@ -125,14 +34,12 @@ int main() {
 		//end token found
 		if (c == 'e') {
 			
-			printf("END (%d): ", pos );
-
+			struct element *end = find_last_element(list);
+			printf("END %s @ pos %d (%d)\n",end->type, end->pos, pos );
 			//go to last added element
-
 			//print type (and pos)
-
 			//remove last added elemnt
-			remove_last_element();
+			remove_last_element(list);
 		}
 
 		//number token found
@@ -185,7 +92,7 @@ int main() {
 		if (c == 'i') {
 			
 			printf("Integer (%d)\n", pos);
-			add_element("integer", pos);
+			add_element(list, "integer", pos);
 			
 			num_index = 0;
 			c = fgetc(file);
@@ -208,14 +115,14 @@ int main() {
 		if (c == 'd') {
 		
 			printf("Dictionary (%d)\n", pos );
-			add_element("dictionary", pos);
+			add_element(list, "dictionary", pos);
 		}
 		
 		//list token found
 		if (c == 'l') {
 		
 			printf("List (%d)\n", pos );
-			add_element("list", pos);
+			add_element(list, "list", pos);
 		}
 
 		c = fgetc(file);
@@ -223,7 +130,6 @@ int main() {
 
 	//close file
 	fclose(file);
-	
 
 	return 0;
 }
