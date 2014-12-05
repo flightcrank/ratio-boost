@@ -3,15 +3,18 @@
 
 struct element {
 	
-	char type[32];
-	int pos;
-	struct element *next;
+	char type;		//token type
+	char value[64];		//token value
+	int pos;		//char position in file
+	struct element *next;	//next element in list
 };
 
 struct element * create_list();
 
-void remove_last_element(struct element *start);
-
 struct element * find_last_element(struct element *start);
 
-void add_element(struct element *start, char type[], int pos);
+void print_all_elements(struct element *start);
+
+void remove_last_element(struct element *start);
+
+void add_element(struct element *start, char type, char value[], int pos);

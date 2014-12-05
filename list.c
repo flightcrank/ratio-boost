@@ -10,7 +10,8 @@ struct element * create_list() {
 		
 	struct element *temp =  malloc(sizeof(struct element));
 	
-	temp->type[0] = '\0';
+	temp->type = '\0';
+	//temp->value = "";
 	temp->pos = -1;
 	temp->next = NULL;
 
@@ -35,6 +36,22 @@ struct element * find_last_element(struct element *start) {
 	}
 }
 
+void print_all_elements(struct element *start) {
+	
+	current = start;
+	
+	while(1) {
+		
+		printf("%c(%d): %s \n",current->type, current->pos, current->value);
+		current = current->next;
+		
+		if (current->next == NULL) {
+			
+			break;
+		}
+	}
+}
+
 void remove_last_element(struct element *start) {
 	
 	current = start;
@@ -44,7 +61,7 @@ void remove_last_element(struct element *start) {
 	while(1) {
 		
 		//nothing in list at all
-		if (current->type[0] == '\0') {
+		if (current->type == '\0') {
 			
 			break;
 		}
@@ -79,7 +96,7 @@ void remove_last_element(struct element *start) {
 	}
 }
 
-void add_element(struct element *start, char type[], int pos) {
+void add_element(struct element *start, char type, char value[], int pos) {
 
 	current = start;
 	
@@ -87,10 +104,11 @@ void add_element(struct element *start, char type[], int pos) {
 	while (1) {
 		
 		//special case: linked list is empty
-		if (current->type[0] == '\0') {
+		if (current->type == '\0') {
 		
 			//set first element in linked list
-			strcpy(current->type, type);
+			current->type = type;
+			strcpy(current->value, value);
 			current->pos = pos;
 			current->next = NULL;
 			start = current;
@@ -112,7 +130,8 @@ void add_element(struct element *start, char type[], int pos) {
 			current = current->next;
 			
 			//add data to that new element structure
-			strcpy(current->type, type);
+			current->type = type;
+			strcpy(current->value, value);
 			current->pos = pos;
 			current->next = NULL;
 			break;

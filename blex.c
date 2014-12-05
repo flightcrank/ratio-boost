@@ -4,10 +4,10 @@
 #include <string.h>
 #include "list.h"
 
-
 int main() {
 	
 	struct element *list = create_list();
+	struct element *lex_list = create_list();
 	
 	FILE *file;
 	
@@ -22,7 +22,7 @@ int main() {
 	}
 
 	char str_len[10]; 	// maximum of nine numbers
-	char str_value[256];	// actual string 
+	char str_value[64];	// actual string 
 	int num_index = 0;	
 	int c = fgetc(file);
 	
@@ -35,10 +35,10 @@ int main() {
 		if (c == 'e') {
 			
 			struct element *end = find_last_element(list);
-			printf("END %s @ pos %d (%d)\n",end->type, end->pos, pos );
-			//go to last added element
-			//print type (and pos)
-			//remove last added elemnt
+			char num[10];
+			sprintf(num, "%d", end->pos);
+
+			add_element(lex_list, 'E', num, pos);
 			remove_last_element(list);
 		}
 
@@ -64,7 +64,7 @@ int main() {
 
 			//to big to put in our max string, dont try to write to the string
 			//to avoid a segfault
-			if (len > 255) {
+			if (len > 63) {
 				
 				//skip over this data
 				fseek(file, len, SEEK_CUR);
@@ -85,14 +85,14 @@ int main() {
 				str_value[i] = c;
 			}
 
-			printf("String \"%s\" (%d) \n", str_value, pos + 1);
+			//printf("String \"%s\" (%d) \n", str_value, pos + 1);
+			add_element(lex_list, 'S', str_value, pos + 1);
 		}
 
 		//integer token found
 		if (c == 'i') {
 			
-			printf("Integer (%d)\n", pos);
-			add_element(list, "integer", pos);
+			add_element(list, 'I', "Integer", pos);
 			
 			num_index = 0;
 			c = fgetc(file);
@@ -107,22 +107,23 @@ int main() {
 			str_len[num_index] = '\0';
 			num_index = 0;
 
-			printf("%s (%d)\n", str_len, pos + 1);
+			add_element(lex_list, 'I', str_len, pos);
+			
 			continue;
 		}
 
 		//dictionary token found
 		if (c == 'd') {
 		
-			printf("Dictionary (%d)\n", pos );
-			add_element(list, "dictionary", pos);
+			add_element(lex_list, 'D', "Dictionary", pos);
+			add_element(list, 'D', "Dictionary", pos);
 		}
 		
 		//list token found
 		if (c == 'l') {
 		
-			printf("List (%d)\n", pos );
-			add_element(list, "list", pos);
+			add_element(lex_list, 'L', "List", pos);
+			add_element(list, 'L', "List", pos);
 		}
 
 		c = fgetc(file);
@@ -130,6 +131,9 @@ int main() {
 
 	//close file
 	fclose(file);
+
+	//print out token list
+	print_all_elements(lex_list);
 
 	return 0;
 }
