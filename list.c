@@ -43,11 +43,14 @@ void print_all_elements(struct element *start) {
 	while(1) {
 		
 		printf("%c(%d): %s \n",current->type, current->pos, current->value);
-		current = current->next;
 		
 		if (current->next == NULL) {
 			
 			break;
+
+		} else {
+		
+			current = current->next;
 		}
 	}
 }
@@ -74,7 +77,6 @@ void remove_last_element(struct element *start) {
 		
 		//last element found
 		} else {
-
 
 			//remove last elemnt
 			free(current);

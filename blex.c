@@ -132,8 +132,43 @@ int main() {
 	//close file
 	fclose(file);
 
-	//print out token list
-	print_all_elements(lex_list);
+	int start = 0;
+	int end = 0;
+	struct element *temp = lex_list;
+
+	while (1) {
+		
+		if ((temp->type = 'S') && (strcmp(temp->value, "info") == 0)) {
+			
+			temp = temp->next;
+
+			if (temp->type == 'D') {
+			
+				start = temp->pos;
+			}
+		}
+		
+		//start has been found
+		if (start != 0) {
+			
+			//process rach 'End' token that also has a value the same as start integer
+			if ((temp->type = 'E') && (atoi(temp->value) == start)) {
+				
+				end = temp->pos;
+			}
+		}
+		
+		if (temp->next == NULL) {
+			
+			break;
+
+		} else {
+		
+			temp = temp->next;
+		}
+	}
+
+	printf("start = %d, end = %d\n", start, end);
 
 	return 0;
 }
