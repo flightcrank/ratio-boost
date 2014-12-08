@@ -3,8 +3,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include "list.h"
+#include "blex.h"
 
-int main() {
+struct element * generate_list() {
 	
 	struct element *list = create_list();
 	struct element *lex_list = create_list();
@@ -18,7 +19,7 @@ int main() {
 
 		printf("Error opening file\n");
 		
-		return 1;
+		return NULL;
 	}
 
 	char str_len[10]; 	// maximum of nine numbers
@@ -132,6 +133,9 @@ int main() {
 	//close file
 	fclose(file);
 
+	return lex_list;
+}
+/*
 	int start = 0;
 	int end = 0;
 	struct element *temp = lex_list;
@@ -170,6 +174,5 @@ int main() {
 
 	printf("start = %d, end = %d\n", start, end);
 
-	return 0;
-}
+	return 0; */
 
