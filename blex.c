@@ -22,7 +22,7 @@ struct element * generate_list(char *file_name) {
 	}
 
 	char str_len[10]; 	// maximum of nine numbers
-	char str_value[64];	// actual string 
+	char str_value[128];	// actual string 
 	int num_index = 0;	
 	int c = fgetc(file);
 	
@@ -64,7 +64,7 @@ struct element * generate_list(char *file_name) {
 
 			//to big to put in our max string, dont try to write to the string
 			//to avoid a segfault
-			if (len > 63) {
+			if (len > 127) {
 				
 				//skip over this data
 				fseek(file, len, SEEK_CUR);

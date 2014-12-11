@@ -1,3 +1,3 @@
 
 
-int urle(char *str, unsigned char * hash);
+int urle(char *str, unsigned char *hash);

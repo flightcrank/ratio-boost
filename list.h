@@ -4,7 +4,7 @@
 struct element {
 	
 	char type;		//token type
-	char value[64];		//token value
+	char value[128];	//token value
 	int pos;		//char position in file
 	struct element *next;	//next element in list
 };
