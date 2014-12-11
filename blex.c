@@ -3,9 +3,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "list.h"
-#include "blex.h"
 
-struct element * generate_list() {
+struct element * generate_list(char *file_name) {
 	
 	struct element *list = create_list();
 	struct element *lex_list = create_list();
@@ -13,7 +12,7 @@ struct element * generate_list() {
 	FILE *file;
 	
 	//open file
-	file = fopen("Pulp - Hits.torrent", "rb");	
+	file = fopen(file_name, "rb");	
 	
 	if (file == 0) {
 
@@ -135,44 +134,3 @@ struct element * generate_list() {
 
 	return lex_list;
 }
-/*
-	int start = 0;
-	int end = 0;
-	struct element *temp = lex_list;
-
-	while (1) {
-		
-		if ((temp->type = 'S') && (strcmp(temp->value, "info") == 0)) {
-			
-			temp = temp->next;
-
-			if (temp->type == 'D') {
-			
-				start = temp->pos;
-			}
-		}
-		
-		//start has been found
-		if (start != 0) {
-			
-			//process rach 'End' token that also has a value the same as start integer
-			if ((temp->type = 'E') && (atoi(temp->value) == start)) {
-				
-				end = temp->pos;
-			}
-		}
-		
-		if (temp->next == NULL) {
-			
-			break;
-
-		} else {
-		
-			temp = temp->next;
-		}
-	}
-
-	printf("start = %d, end = %d\n", start, end);
-
-	return 0; */
-
