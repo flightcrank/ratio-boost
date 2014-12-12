@@ -21,7 +21,7 @@ struct element * generate_list(char *file_name) {
 		return NULL;
 	}
 
-	char str_len[10]; 	// maximum of nine numbers
+	char str_len[24]; 	// maximum of 23 numbers
 	char str_value[128];	// actual string 
 	int num_index = 0;	
 	int c = fgetc(file);
@@ -71,22 +71,25 @@ struct element * generate_list(char *file_name) {
 				continue;
 			}
 
-			//continue to read (str_len) number of chars into a string
+			//continue to read len number of chars into a string
 			for (i = 0; i <= len; i++) {
 				
 				//add null byte to string
 				if (i == len) {
 					
 					str_value[i] = '\0';
+					add_element(lex_list, 'S', str_value, pos + 1);
 					break;
 				}
 
 				c = fgetc(file);
 				str_value[i] = c;
 			}
-
-			//printf("String \"%s\" (%d) \n", str_value, pos + 1);
-			add_element(lex_list, 'S', str_value, pos + 1);
+			
+			//string has been processed and added to the linked list. consume the next char in the
+			//file and start fromt the top of the while loop
+			c = fgetc(file);
+			continue;
 		}
 
 		//integer token found
