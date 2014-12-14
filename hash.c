@@ -32,8 +32,7 @@ void get_size(unsigned long *len, void *list) {
 
 			if ((temp->type == 'I')) {
 				
-				*len += atoi(temp->value);
-
+				*len += atol(temp->value);
 			}
 		}
 		
