@@ -15,6 +15,39 @@ void load_torrent_info(char *file_name, struct torrent *tdata) {
 	get_info_hash(file_name, list, tdata->info_hash);
 	get_peer_id(tdata->peer_id);
 	get_url(tdata->url, list);
+	get_size(&tdata->size, list);
+}
+
+void get_size(unsigned long *len, void *list) {
+
+	*len = 0;
+
+	struct element *temp = list;
+
+	while (1) {
+	
+		if ((temp->type == 'S') && (strcmp(temp->value, "length") == 0)) {
+			
+			temp = temp->next;
+
+			if ((temp->type == 'I')) {
+				
+				*len += atoi(temp->value);
+
+			}
+		}
+		
+		//last item on list
+		if (temp->next == NULL) {
+			
+			break;
+
+		//get next item in list
+		} else {
+		
+			temp = temp->next;
+		}
+	}
 }
 
 void get_url(char *url, void *list)  {
@@ -97,7 +130,7 @@ int get_info_hash(char *file_name, void *list, unsigned char *hash) {
 		if (start != 0) {
 			
 			//process rach 'End' token that also has a value the same as start integer
-			if ((temp->type = 'E') && (atoi(temp->value) == start)) {
+			if ((temp->type == 'E') && (atoi(temp->value) == start)) {
 				
 				end = temp->pos;
 			}
