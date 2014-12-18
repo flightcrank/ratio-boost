@@ -101,6 +101,8 @@ int main(int argc, char *argv[]) {
 	int kb_sec = 30;
 	int i = 0;
 	
+	resp.interval = 20;
+
 	clock_gettime(CLOCK_MONOTONIC, &start);
 	
 	while (1) {
