@@ -7,7 +7,18 @@ struct torrent {
 	unsigned long size;
 };
 
-void load_torrent_info(char *file_name, struct torrent *tdata);
+struct responce {
+
+	char failure[256];
+	char id[64];
+	int interval;
+	int complete;
+	int incomplete;
+};
+
+void load_torrent_info(FILE *file_name, struct torrent *tdata);
+
+void load_responce_info(FILE *file_name, struct responce *rdata);
 
 void get_url(char *url, void *list);
 
@@ -15,5 +26,5 @@ void get_peer_id(char *peer_id);
 
 void get_size(unsigned long *len, void *list);
 
-int get_info_hash(char *filename, void *list, unsigned char *hash);
+int get_info_hash(FILE *filename, void *list, unsigned char *hash);
 

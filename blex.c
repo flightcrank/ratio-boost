@@ -4,25 +4,16 @@
 #include <string.h>
 #include "list.h"
 
-struct element * generate_list(char *file_name) {
+struct element * generate_list(FILE *file) {
 	
+	//make sure were at the beggining of the file
+	rewind(file);
+
 	struct element *list = create_list();
 	struct element *lex_list = create_list();
 	
-	FILE *file;
-	
-	//open file
-	file = fopen(file_name, "rb");	
-	
-	if (file == 0) {
-
-		printf("Error opening file\n");
-		
-		return NULL;
-	}
-
 	char str_len[24]; 	// maximum of 23 numbers
-	char str_value[128];	// actual string 
+	char str_value[256];	// actual string 
 	int num_index = 0;	
 	int c = fgetc(file);
 	
@@ -64,7 +55,7 @@ struct element * generate_list(char *file_name) {
 
 			//to big to put in our max string, dont try to write to the string
 			//to avoid a segfault
-			if (len > 127) {
+			if (len > 255) {
 				
 				//skip over this data
 				fseek(file, len, SEEK_CUR);
@@ -132,8 +123,6 @@ struct element * generate_list(char *file_name) {
 		c = fgetc(file);
 	}
 
-	//close file
-	fclose(file);
 
 	return lex_list;
 }

@@ -1,3 +1,3 @@
 
 
-struct element * generate_list(char *file_name);
+struct element * generate_list(FILE *file);
