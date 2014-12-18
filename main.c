@@ -109,7 +109,7 @@ int main(int argc, char *argv[]) {
 		int diff = current.tv_sec - start.tv_sec;
 
 		//resp->interval number of seconds has passed
-		if (diff >= 30) {
+		if (diff >= resp.interval) {
 			
 			clock_gettime(CLOCK_MONOTONIC, &start);
 			uploaded += (1024 * resp.interval) * kb_sec;
