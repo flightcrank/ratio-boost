@@ -7,15 +7,24 @@
 #include "hash.h"
 #include "list.h"
 
-void load_torrent_info(FILE *file_name, struct torrent *tdata) {
+int load_torrent_info(FILE *file_name, struct torrent *tdata) {
 	
 	//create linked list of all torrrent data
 	struct element *list = generate_list(file_name);
+	
+	int v = validate(list);
+
+	if (v == 1) {
+		
+		return 1;
+	}
 
 	get_info_hash(file_name, list, tdata->info_hash);
 	get_peer_id(tdata->peer_id);
 	get_url(tdata->url, list);
 	get_size(&tdata->size, list);
+
+	return 0;
 }
 
 void load_responce_info(FILE *file, struct responce *rdata) {

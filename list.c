@@ -55,7 +55,7 @@ void print_all_elements(struct element *start) {
 	}
 }
 
-void remove_last_element(struct element *start) {
+struct element * remove_last_element(struct element *start) {
 	
 	current = start;
 
@@ -66,7 +66,7 @@ void remove_last_element(struct element *start) {
 		//nothing in list at all
 		if (current->type == '\0') {
 			
-			break;
+			return start;
 		}
 
 		//skip over all elements in the linked list
@@ -86,25 +86,28 @@ void remove_last_element(struct element *start) {
 				
 				current = prev;
 				current->next = NULL;
-				break;
+				return start;
 			
 			//prev was never set, meaning we were at the first element with no other elements linked to it
 			} else {
 				
-				start = NULL;
-				break;
+				current->type = '\0';
+				return start;
 			}
 		}
 	}
+
+	return start;
 }
 
 void add_element(struct element *start, char type, char value[], int pos) {
 
 	current = start;
+
 	
 	//go to last element
 	while (1) {
-		
+	
 		//special case: linked list is empty
 		if (current->type == '\0') {
 		

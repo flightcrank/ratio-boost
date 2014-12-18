@@ -15,6 +15,6 @@ struct element * find_last_element(struct element *start);
 
 void print_all_elements(struct element *start);
 
-void remove_last_element(struct element *start);
+struct element * remove_last_element(struct element *start);
 
 void add_element(struct element *start, char type, char value[], int pos);

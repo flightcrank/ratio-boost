@@ -16,7 +16,7 @@ struct responce {
 	int incomplete;
 };
 
-void load_torrent_info(FILE *file_name, struct torrent *tdata);
+int load_torrent_info(FILE *file_name, struct torrent *tdata);
 
 void load_responce_info(FILE *file_name, struct responce *rdata);
 

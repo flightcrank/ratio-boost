@@ -34,7 +34,7 @@ int tracker_connect(CURL *handle, char *request, struct responce *rdata) {
 
 	} else {
 		
-		printf("complete = %d incomplete = %d interval = %d\n",rdata->complete, rdata->incomplete, rdata->interval);
+		printf("seeders = %d leeches = %d update interval = %d\n",rdata->complete, rdata->incomplete, rdata->interval);
 	}
 
 	return 0;
@@ -67,7 +67,14 @@ int main(int argc, char *argv[]) {
 	}
 	
 	//Load all the required information found in the torrent file to a torrent structure
-	load_torrent_info(torrent_file, &info);
+	int ti = load_torrent_info(torrent_file, &info);
+
+	if (ti != 0) {
+		
+		printf("invalid torrent file or bencoded responce.\n");
+		return 1;
+	}
+
 	fclose(torrent_file);
 	
 	//convert some data to a format needed by the tracker
@@ -82,6 +89,7 @@ int main(int argc, char *argv[]) {
 
 	int tc = tracker_connect(curl_handle, request, &resp);
 	
+	//responce failure found exit program
 	if (tc == 1) {
 		
 		return 1;
@@ -90,7 +98,7 @@ int main(int argc, char *argv[]) {
 	//prepare to loop at regular intervals
 	struct timespec start;
 	struct timespec current;
-	int kb_sec = 1024;
+	int kb_sec = 30;
 	int i = 0;
 	
 	clock_gettime(CLOCK_MONOTONIC, &start);
@@ -101,7 +109,7 @@ int main(int argc, char *argv[]) {
 		int diff = current.tv_sec - start.tv_sec;
 
 		//resp->interval number of seconds has passed
-		if (diff >= resp.interval) {
+		if (diff >= 30) {
 			
 			clock_gettime(CLOCK_MONOTONIC, &start);
 			uploaded += (1024 * resp.interval) * kb_sec;
@@ -112,7 +120,7 @@ int main(int argc, char *argv[]) {
 	
 			//preform the request
 			tracker_connect(curl_handle, request, &resp);
-			printf("\n%i: %ld\n", i,  uploaded);	
+			printf("%i: uploaded = %ld bytes\n", i,  uploaded);	
 		}
 	}
 

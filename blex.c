@@ -4,6 +4,50 @@
 #include <string.h>
 #include "list.h"
 
+
+int validate(struct element *list) {
+
+	struct element *temp = list;
+	int first = 0;
+	int last = 0;
+	int i = 0;
+
+	while (1) {
+	
+		if (i == 0 && temp->type == 'D') {
+			
+			first = 1;
+		}
+		
+		//last item on list
+		if (temp->next == NULL) {
+			
+			if (temp->type == 'E') {
+			
+				last = 1;
+			}
+
+			break;
+
+		//get next item in list
+		} else {
+		
+			temp = temp->next;
+			i++;
+		}
+	}
+
+	if(first == 1 && last == 1) {
+
+		return 0;
+
+	} else {
+		
+		return 1;
+	}
+}
+
+
 struct element * generate_list(FILE *file) {
 	
 	//make sure were at the beggining of the file
@@ -30,7 +74,7 @@ struct element * generate_list(FILE *file) {
 			sprintf(num, "%d", end->pos);
 
 			add_element(lex_list, 'E', num, pos);
-			remove_last_element(list);
+			list = remove_last_element(list);
 		}
 
 		//number token found
@@ -93,6 +137,11 @@ struct element * generate_list(FILE *file) {
 			
 			while (c != 'e') {
 				
+				//str_len[] can only hold 24 (0 - 23) values quit out of loop of this value is met 
+				if (num_index == 23) {
+					break;
+				}
+
 				str_len[num_index] = c;
 				c = fgetc(file);
 				num_index++;
@@ -122,7 +171,6 @@ struct element * generate_list(FILE *file) {
 
 		c = fgetc(file);
 	}
-
-
+	
 	return lex_list;
 }
