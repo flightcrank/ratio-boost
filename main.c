@@ -4,7 +4,6 @@
 #include <curl/curl.h>
 #include "urle.h"	//encode hash
 #include "hash.h"	//get torrent meta info
-#include "list.h"	//print linked list
 #include "blex.h"	//generate a linked list
 
 //perform connection to the torrent tracker
@@ -101,7 +100,6 @@ int main(int argc, char *argv[]) {
 	int kb_sec = 30;
 	int i = 0;
 	
-	resp.interval = 20;
 
 	clock_gettime(CLOCK_MONOTONIC, &start);
 	
@@ -122,7 +120,10 @@ int main(int argc, char *argv[]) {
 	
 			//preform the request
 			tracker_connect(curl_handle, request, &resp);
-			printf("%i: uploaded = %ld bytes\n", i,  uploaded);	
+			
+			float kb = uploaded / 1024;
+			float mb = kb / 1024;
+			printf("%i: uploaded = %.2f MB @ %d KB/s\n", i, mb, kb_sec);	
 		}
 	}
 

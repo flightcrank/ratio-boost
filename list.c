@@ -142,3 +142,48 @@ void add_element(struct element *start, char type, char value[], int pos) {
 	}
 }
 
+void remove_all_elements(struct element *start) {
+
+	current = start;
+
+	struct element *prev = NULL;
+
+	while(1) {
+		
+		//nothing in list at all
+		if (current->type == '\0') {
+			
+			free(current);
+			break;
+		}
+
+		//skip over all elements in the linked list to remove the last element first
+		if(current->next != NULL) {
+			
+			prev = current;
+			current = current->next;
+		
+		//last element found
+		} else {
+
+			//remove last elemnt
+			free(current);
+
+			if (prev != NULL) {
+				
+				current = prev;
+				current->next = NULL;
+				current = start;
+				prev = NULL;
+				continue;
+
+			//prev was never set, meaning we were at the first element with no other elements linked to it
+			} else {
+				
+				//first element already free'd break out of the loop
+				break;
+			}
+		}
+	}
+}
+

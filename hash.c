@@ -23,6 +23,9 @@ int load_torrent_info(FILE *file_name, struct torrent *tdata) {
 	get_peer_id(tdata->peer_id);
 	get_url(tdata->url, list);
 	get_size(&tdata->size, list);
+	
+	//linked list no longer needed, free the memory it uses
+	remove_all_elements(list);
 
 	return 0;
 }
