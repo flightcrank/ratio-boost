@@ -9,7 +9,7 @@ to compile with GCC
 
 `gcc list.c blex.c hash.c urle.c main.c -lcrypto -lcurl -Wall -g -o app`
 
-This program is in early development and has bugs
+This program is still in early development
 
 ## Images
 ![spoofed ratio result](http://i.imgur.com/0FCZTEt.png)
