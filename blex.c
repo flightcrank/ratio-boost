@@ -74,7 +74,7 @@ struct element * generate_list(FILE *file) {
 			sprintf(num, "%d", end->pos);
 
 			add_element(lex_list, 'E', num, pos);
-			list = remove_last_element(list);
+			remove_last_element(list);
 		}
 
 		//number token found
