@@ -11,7 +11,6 @@ struct element * create_list() {
 	struct element *temp =  malloc(sizeof(struct element));
 	
 	temp->type = '\0';
-	//temp->value = "";
 	temp->pos = -1;
 	temp->next = NULL;
 
