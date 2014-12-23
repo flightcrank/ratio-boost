@@ -7,54 +7,23 @@
 
 int validate(struct element *list) {
 
-	struct element *temp = list;
-	int first = 0;
-	int last = 0;
-	int i = 0;
+	struct element *last = find_last_element(list);
 
-	while (1) {
-	
-		if (i == 0 && temp->type == 'D') {
-			
-			first = 1;
-		}
+	if (list->type == 'D' && last->type == 'E') {
 		
-		//last item on list
-		if (temp->next == NULL) {
-			
-			if (temp->type == 'E') {
-			
-				last = 1;
-			}
-
-			break;
-
-		//get next item in list
-		} else {
-		
-			temp = temp->next;
-			i++;
-		}
-	}
-
-	if(first == 1 && last == 1) {
-
 		return 0;
-
-	} else {
-		
-		return 1;
 	}
-}
 
+	return 1;
+}
 
 struct element * generate_list(FILE *file) {
 	
 	//make sure were at the beggining of the file
 	rewind(file);
 
+	struct element *temp = create_list();
 	struct element *list = create_list();
-	struct element *lex_list = create_list();
 	
 	char str_len[24]; 	// maximum of 23 numbers
 	char str_value[256];	// actual string 
@@ -69,12 +38,12 @@ struct element * generate_list(FILE *file) {
 		//end token found
 		if (c == 'e') {
 			
-			struct element *end = find_last_element(list);
+			struct element *end = find_last_element(temp);
 			char num[10];
 			sprintf(num, "%d", end->pos);
 
-			add_element(lex_list, 'E', num, pos);
-			remove_last_element(list);
+			add_element(list, 'E', num, pos);
+			remove_last_element(temp);
 		}
 
 		//number token found
@@ -113,7 +82,7 @@ struct element * generate_list(FILE *file) {
 				if (i == len) {
 					
 					str_value[i] = '\0';
-					add_element(lex_list, 'S', str_value, pos + 1);
+					add_element(list, 'S', str_value, pos + 1);
 					break;
 				}
 
@@ -130,7 +99,7 @@ struct element * generate_list(FILE *file) {
 		//integer token found
 		if (c == 'i') {
 			
-			add_element(list, 'I', "Integer", pos);
+			add_element(temp, 'I', "Integer", pos);
 			
 			num_index = 0;
 			c = fgetc(file);
@@ -150,7 +119,7 @@ struct element * generate_list(FILE *file) {
 			str_len[num_index] = '\0';
 			num_index = 0;
 
-			add_element(lex_list, 'I', str_len, pos);
+			add_element(list, 'I', str_len, pos);
 			
 			continue;
 		}
@@ -158,19 +127,20 @@ struct element * generate_list(FILE *file) {
 		//dictionary token found
 		if (c == 'd') {
 		
-			add_element(lex_list, 'D', "Dictionary", pos);
 			add_element(list, 'D', "Dictionary", pos);
+			add_element(temp, 'D', "Dictionary", pos);
 		}
 		
 		//list token found
 		if (c == 'l') {
 		
-			add_element(lex_list, 'L', "List", pos);
 			add_element(list, 'L', "List", pos);
+			add_element(temp, 'L', "List", pos);
 		}
 
 		c = fgetc(file);
 	}
 	
-	return lex_list;
+
+	return list;
 }
