@@ -1,4 +1,4 @@
-# RATIO-SPOOF
+# RATIO-BOOST
 
 This program is intended to be used to obtain a good ratio on private torrent trackers.
 It reports to the tracker that you are uploading data when you are not actually uploading anything at all.
