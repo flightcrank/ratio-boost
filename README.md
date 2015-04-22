@@ -9,11 +9,15 @@ This program is dependant on openssh and libcurl libs installed on your system
 
 to compile with GCC
 
-`gcc list.c blex.c hash.c urle.c main.c -lcrypto -lcurl -o app`
+```
+gcc list.c blex.c hash.c urle.c main.c -lcrypto -lcurl -o app
+```
 
 to compile GTK GUI version with GCC
 
-`gcc blex.c hash.c list.c urle.c gtk_main.c -export-dynamic -lcrypto -lcurl `pkg-config --cflags --libs gtk+-3.0` -o app`
+```
+gcc blex.c hash.c list.c urle.c gtk_main.c -export-dynamic -lcrypto -lcurl `pkg-config --cflags --libs gtk+-3.0` -o app
+```
 
 This program is still in early development
 
