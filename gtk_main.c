@@ -25,12 +25,6 @@ guint id = 0;
 GtkBuilder *builder;
 CURL *curl_handle = NULL;
 
-void test() {
-	
-	uploaded += 30;
-	printf("test %ld\n", uploaded);
-}
-
 int main (int argc, char *argv[]) {
 	
 	gtk_init(&argc, &argv);
@@ -158,8 +152,6 @@ void open_file(GtkFileChooser *fc, gpointer data) {
 	
 	//Load all the required information found in the torrent file to a torrent structure
 	int ti = load_torrent_info(torrent_file, &info);
-	
-	
 	
 	if (ti != 0) {
 		
