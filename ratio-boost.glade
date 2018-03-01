@@ -52,7 +52,7 @@
               <object class="GtkFileChooserButton" id="filechooserbutton1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <signal name="file-set" handler="open_file" object="label2" swapped="no"/>
+                <signal name="file-set" handler="open_file" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>

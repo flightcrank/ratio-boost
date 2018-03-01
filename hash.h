@@ -2,7 +2,7 @@
 struct torrent {
 	
 	unsigned char info_hash[20];
-	char peer_id[20];
+	unsigned char peer_id[20];
 	char url[128];
 	unsigned long size;
 };

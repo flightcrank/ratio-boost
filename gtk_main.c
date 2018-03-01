@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <gtk/gtk.h>
 #include <curl/curl.h>
+#include <string.h>
 #include "urle.h"	//encode hash
 #include "hash.h"	//get torrent meta info
 #include "blex.h"	//generate a linked list
@@ -146,7 +147,7 @@ void open_file(GtkFileChooser *fc, gpointer data) {
 
 	//Open torrent file for processing
 	torrent_file = fopen(str, "rb");	
-
+		
 	if (torrent_file == 0) {
 
 		gtk_message_dialog_set_markup(GTK_MESSAGE_DIALOG(message), "Error opening file");
@@ -157,7 +158,9 @@ void open_file(GtkFileChooser *fc, gpointer data) {
 	
 	//Load all the required information found in the torrent file to a torrent structure
 	int ti = load_torrent_info(torrent_file, &info);
-
+	
+	
+	
 	if (ti != 0) {
 		
 		gtk_message_dialog_set_markup(GTK_MESSAGE_DIALOG(message), "Invalid torrent file");
@@ -171,11 +174,34 @@ void open_file(GtkFileChooser *fc, gpointer data) {
 
 	//convert some data to a format needed by the tracker
 	urle(e_hash, info.info_hash);
-	urle(e_peer_id, (unsigned char *) info.peer_id);
+	urle(e_peer_id, info.peer_id);
+	
+	//format some strings for better out put on the GUI (info hash and peer ID)	
+	char val[2];
+	char torrent_hash[56];
+	char p_id[56];
+	char client[8];
+	int i;
+	strcpy(client, info.peer_id);
+	torrent_hash[0] = '\0';
+	p_id[0] = '\0';
+	client[8] = '\0';
+	
+	for(i = 0; i < 20; i++) {
+		
+		sprintf(val, "%02X", info.info_hash[i]);
+		strncat(torrent_hash, val, 2);
+	}	
+	
+	for(i = 8; i < 20; i++) {
+	
+		sprintf(val, "%02X", info.peer_id[i]);
+		strncat(p_id, val, 2);
+	}
 	
 	GString *output = g_string_new("");
 	float size = (info.size / 1024) / 1024;
-	g_string_printf(output, "<b>Info Hash: </b> %s\n<b>Peer_Id: </b>%s\n<b>Size (MB): </b>%.2f", e_hash, e_peer_id, size );
+	g_string_printf(output, "<b>Info Hash: </b> %s\n<b>Peer_Id: </b>%s%s\n<b>Size (MB): </b>%.2f",torrent_hash, client, p_id, size );
 	gtk_label_set_markup(GTK_LABEL(label), output->str);
 }
 
