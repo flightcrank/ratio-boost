@@ -1,5 +1,7 @@
 # RATIO-BOOST
 
+***
+
 This program is intended to be used to obtain a good ratio on private torrent trackers.
 It reports to the tracker that you are uploading data when you are not actually uploading anything at all.
 This program was created due to the lack of ratio boosting programs for the linux operating system. Booting into windows or using
@@ -16,7 +18,7 @@ if you find one that trips it up, just locate other ones that do work to spoof y
 
 to compile GTK GUI version with GCC
 
-`gcc blex.c hash.c list.c urle.c gtk_main.c -export-dynamic -lcrypto -lcurl `pkg-config --cflags --libs gtk+-3.0` -o app`
+    gcc blex.c hash.c list.c urle.c gtk_main.c -lcrypto -lcurl -export-dynamic `pkg-config gtk+-3.0 --cflags --libs` -o app
 
 This program is still under development
 
