@@ -59,8 +59,13 @@ void show_popup(GtkWidget *widget, GdkEvent *event) {
 
    GObject *menu = gtk_builder_get_object(builder, "popup_menu");
    GdkEventButton *bevent = (GdkEventButton *) event;
+  
+   //right click
+   if (bevent->button == 3) {  
+       
+       gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL, bevent->button, bevent->time);
+   }
    
-   gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL, bevent->button, bevent->time);
 }
 
 //perform connection to the torrent tracker
