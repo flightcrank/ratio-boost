@@ -39,13 +39,28 @@ int main (int argc, char *argv[]) {
 	/*connect singnals to callback functions */
 	gtk_builder_connect_signals (builder, NULL);
 	
-	//main program loop	
+    //main program loop	
 	gtk_main();
 	
 	//free memory used by the curl easy interface
 	curl_easy_cleanup(curl_handle);
 	
 	return 0;
+}
+
+void show_about(GtkWidget *widget, GdkEvent *event) {
+    
+    GObject *about = gtk_builder_get_object(builder, "about_dialog");
+    gtk_dialog_run(GTK_DIALOG(about));
+    gtk_widget_hide(GTK_WIDGET(about));
+}
+
+void show_popup(GtkWidget *widget, GdkEvent *event) {
+
+   GObject *menu = gtk_builder_get_object(builder, "popup_menu");
+   GdkEventButton *bevent = (GdkEventButton *) event;
+   
+   gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL, bevent->button, bevent->time);
 }
 
 //perform connection to the torrent tracker
