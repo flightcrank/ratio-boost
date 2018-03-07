@@ -9,7 +9,7 @@
 
 int load_torrent_info(FILE *file_name, struct torrent *tdata) {
 	
-	//create linked list of all torrrent data
+	//create linked list of all torrent data
 	struct element *list = generate_list(file_name);
 	
 	int v = validate(list);
@@ -41,7 +41,7 @@ void load_responce_info(FILE *file, struct responce *rdata) {
 			
 			temp = temp->next;
 			
-			//actuall failure reaons string
+			//actual failure reasons string
 			if ((temp->type == 'S')) {
 			
 				strcpy(rdata->failure, temp->value);
@@ -135,7 +135,7 @@ void get_url(char *url, void *list)  {
 			//the next element has the value we need skip over to it
 			temp = temp->next;
 			
-			//elemnt should be of type 'S' with the value containing the URL
+			//element should be of type 'S' with the value containing the URL
 			if (temp->type == 'S') {
 				
 				strcpy(url, temp->value);
@@ -202,7 +202,7 @@ int get_info_hash(FILE *file, void *list, unsigned char *hash) {
 		//start has been found, now look for end
 		if (start != 0) {
 			
-			//process rach 'End' token that also has a value the same as start integer
+			//process reaches 'End' token that also has a value the same as start integer
 			if ((temp->type == 'E') && (atoi(temp->value) == start)) {
 				
 				end = temp->pos;
@@ -220,7 +220,7 @@ int get_info_hash(FILE *file, void *list, unsigned char *hash) {
 		}
 	}
 	
-	//make were at the beggining of the file
+	//make were at the beginning of the file
 	rewind(file);
 
 	unsigned char c = fgetc(file);

@@ -77,7 +77,7 @@ void remove_last_element(struct element *start) {
 		//last element found
 		} else {
 
-			//remove last elemnt
+			//remove last element
 			free(current);
 
 			//set previous element to be the new last element
@@ -165,7 +165,7 @@ void remove_all_elements(struct element *start) {
 		//last element found
 		} else {
 
-			//remove last elemnt
+			//remove last element
 			free(current);
 
 			if (prev != NULL) {
@@ -179,7 +179,7 @@ void remove_all_elements(struct element *start) {
 			//prev was never set, meaning we were at the first element with no other elements linked to it
 			} else {
 				
-				//first element already free'd break out of the loop
+				//first element already freed break out of the loop
 				break;
 			}
 		}

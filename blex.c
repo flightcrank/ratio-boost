@@ -19,7 +19,7 @@ int validate(struct element *list) {
 
 struct element * generate_list(FILE *file) {
 	
-	//make sure were at the beggining of the file
+	//make sure were at the beginning of the file
 	rewind(file);
 
 	struct element *temp = create_list();
@@ -54,7 +54,7 @@ struct element * generate_list(FILE *file) {
 		}
 
 		//end of string length number reached
-		//begining of string starts at the next char
+		//beginning of string starts at the next char
 		if (c == ':') {
 			
 			//add null byte to string length
@@ -66,7 +66,7 @@ struct element * generate_list(FILE *file) {
 			int len = atoi(str_len);
 			int i = 0;
 
-			//to big to put in our max string, dont try to write to the string
+			//to big to put in our max string, don't try to write to the string
 			//to avoid a segfault
 			if (len > 255) {
 				
@@ -91,7 +91,7 @@ struct element * generate_list(FILE *file) {
 			}
 			
 			//string has been processed and added to the linked list. consume the next char in the
-			//file and start fromt the top of the while loop
+			//file and start from the top of the while loop
 			c = fgetc(file);
 			continue;
 		}

@@ -10,7 +10,7 @@ int urle(char *str, unsigned char *hash) {
 	int i;
 	char temp[4];
 
-	//loop throught each byte in the hash
+	//loop throughout each byte in the hash
 	for (i = 0; i < 20; i++) {
 		
 		if (hash[i] >= '0' && hash[i] <= '9') {

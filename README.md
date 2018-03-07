@@ -3,10 +3,10 @@
 
 This program is intended to be used to obtain a good ratio on private torrent trackers.
 It reports to the tracker that you are uploading data when you are not actually uploading anything at all.
-This program was created due to the lack of ratio boosting programs for the linux operating system. Booting into windows or using
+This program was created due to the lack of ratio boosting programs for the Linux operating system. Booting into windows or using
 an emulator or virtual machine seems overkill for a simple program such as this.
 
-this program can also spoof downloads but that functionality isnt included for now, as it is not needed. the program will report to the tracker
+this program can also spoof downloads but that functionality isn't included for now, as it is not needed. the program will report to the tracker
 that 100% of the file has already been downloaded.
 
 This program is dependant on GTK, openssh and libcurl libs installed on your system
