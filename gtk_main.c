@@ -21,6 +21,9 @@ unsigned long uploaded = 0;
 unsigned long downloaded = 0;
 FILE *torrent_file;
 guint id = 0;
+guint timer_id = 0;
+GTimer *timer = NULL;
+double elapsed = 0;
 
 GtkBuilder *builder;
 CURL *curl_handle = NULL;
@@ -38,19 +41,37 @@ int main (int argc, char *argv[]) {
 	
 	/*connect singnals to callback functions */
 	gtk_builder_connect_signals (builder, NULL);
-	
+        
+    timer = g_timer_new();
+    
     //main program loop	
 	gtk_main();
 	
+    g_timer_destroy(timer);
 	//free memory used by the curl easy interface
 	curl_easy_cleanup(curl_handle);
 	
 	return 0;
 }
 
+void countdown() {
+    
+	GObject *upload_field = gtk_builder_get_object(builder, "upload_value");
+	GObject *output_label = gtk_builder_get_object(builder, "output_data");
+	GString *output = g_string_new("");
+    
+    elapsed = g_timer_elapsed(timer, NULL);//time elapse
+	int upload_val = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(upload_field));
+    uploaded += 1024 * upload_val;//add amount uplaoded in bytes
+	float mb = (float)(uploaded / 1024) / 1024;
+	g_string_printf(output, "<b>Update Interval: </b> %d\n<b>Seeders: </b> %d\n<b>Leeches: </b> %d\n<b>Uploaded (MB): </b>%.2f\n<b>Next Update: </b>%.0f", resp.interval, resp.complete, resp.incomplete, mb, resp.interval - elapsed);
+	gtk_label_set_markup(GTK_LABEL(output_label), output->str);
+}
+
 void show_about(GtkWidget *widget, GdkEvent *event) {
     
     GObject *about = gtk_builder_get_object(builder, "about_dialog");
+    
     gtk_dialog_run(GTK_DIALOG(about));
     gtk_widget_hide(GTK_WIDGET(about));
 }
@@ -60,7 +81,8 @@ void show_popup(GtkWidget *widget, GdkEvent *event) {
    GObject *menu = gtk_builder_get_object(builder, "popup_menu");
    GdkEventButton *bevent = (GdkEventButton *) event;
   
-   //right click
+  
+    //right click
    if (bevent->button == 3) {  
        
        gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL, bevent->button, bevent->time);
@@ -71,11 +93,11 @@ void show_popup(GtkWidget *widget, GdkEvent *event) {
 //perform connection to the torrent tracker
 void tracker_connect() {
 
-	GObject *upload_field = gtk_builder_get_object(builder, "upload_value");
+	//GObject *upload_field = gtk_builder_get_object(builder, "upload_value");
 	GObject *download_field = gtk_builder_get_object(builder, "download_value");
 	GObject *output_label = gtk_builder_get_object(builder, "output_data");
 	GObject *message = gtk_builder_get_object(builder, "messagedialog1");
-	int upload_val = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(upload_field));
+	//int upload_val = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(upload_field));
 	int download_val = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(download_field));
 	
 	//prepare the URL, and query string needed for a correct tracker responce.
@@ -110,11 +132,12 @@ void tracker_connect() {
 		
 		GString *output = g_string_new("");
 		float mb = (float)(uploaded / 1024) / 1024;
-		g_string_printf(output, "<b>Update Interval: </b> %d\n<b>Seeders: </b> %d\n<b>Leeches: </b> %d\n<b>Uploaded (MB): </b>%.2f", resp.interval, resp.complete, resp.incomplete, mb);
+		g_string_printf(output, "<b>Update Interval: </b> %d\n<b>Seeders: </b> %d\n<b>Leeches: </b> %d\n<b>Uploaded (MB): </b>%.2f\n<b>Next Update: </b>", resp.interval, resp.complete, resp.incomplete, mb);
 		gtk_label_set_markup(GTK_LABEL(output_label), output->str);
-		uploaded += (1024 * resp.interval) * upload_val;//in bytes
-		downloaded += (1024 * resp.interval) * upload_val;//in bytes
+		//uploaded += (1024 * resp.interval) * upload_val;//in bytes
+		downloaded += (1024 * resp.interval) * download_val;//in bytes
 		printf("seeders = %d leeches = %d update interval = %d uploaded = %.2f\n",resp.complete, resp.incomplete, resp.interval, mb);
+        g_timer_start(timer);//reset the countdown timer
 	}
 }
 
@@ -132,7 +155,7 @@ void send_request(GtkButton *button, gpointer user_data) {
 		gtk_spinner_start(GTK_SPINNER(spinner));//start the spinning animation widgit
 		gtk_button_set_label(GTK_BUTTON(connect_button), "Disconnect");
 
-		g_string_printf(output, "<b>Update Interval (seconds): </b> %d\n<b>Seeders: </b> %d\n<b>Leeches: </b> %d\n<b>Uploaded (MB): </b>%ld", resp.interval, resp.complete, resp.incomplete, uploaded);
+		g_string_printf(output, "<b>Update Interval (seconds): </b> %d\n<b>Seeders: </b> %d\n<b>Leeches: </b> %d\n<b>Uploaded (MB): </b>%ld\n<b>Next Update</b>", resp.interval, resp.complete, resp.incomplete, uploaded);
 		gtk_label_set_markup(GTK_LABEL(output_label), output->str);
 
 		//prepare the URL, and query string needed for a correct tracker responce.
@@ -142,12 +165,17 @@ void send_request(GtkButton *button, gpointer user_data) {
 		
 		//execute function at regular intervals
 		id = g_timeout_add_seconds(resp.interval, (GSourceFunc)tracker_connect, NULL);
+        
+        g_timer_start(timer);
+		timer_id = g_timeout_add_seconds(1, (GSourceFunc)countdown, NULL);
 		
 	} else { //Disconnect procedure
 	
 		gtk_spinner_stop(GTK_SPINNER(spinner));
 		gtk_button_set_label(GTK_BUTTON(connect_button), "Connect");
+        g_timer_stop(timer);
 		g_source_remove(id); //stop function from executing at regualr intervals	
+		g_source_remove(timer_id); //stop function from executing at regualr intervals	
 		uploaded = 0; //reset upload amount
 	}
 }
@@ -192,7 +220,7 @@ void open_file(GtkFileChooser *fc, gpointer data) {
 	char val[2];
 	char torrent_hash[56];
 	char p_id[56];
-	char client[8];
+	unsigned char client[8];
 	int i;
 	strcpy(client, info.peer_id);
 	torrent_hash[0] = '\0';

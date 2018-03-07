@@ -22,6 +22,8 @@ to compile GTK GUI version with GCC
 This program is still under development
 
 ## Images (GTK version)
+![animation](https://i.imgur.com/uY6znXG.gifv)
+
 ![spoofed ratio result](https://i.imgur.com/ApvQTT2.png)
 
 

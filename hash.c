@@ -156,7 +156,7 @@ void get_url(char *url, void *list)  {
 	}
 }
 
-void get_peer_id(char *peer_id) {
+void get_peer_id(unsigned char *peer_id) {
 	
 	peer_id[0] = '-';
 	peer_id[1] = 'T';

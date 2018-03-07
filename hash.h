@@ -22,7 +22,7 @@ void load_responce_info(FILE *file_name, struct responce *rdata);
 
 void get_url(char *url, void *list);
 
-void get_peer_id(char *peer_id);
+void get_peer_id(unsigned char *peer_id);
 
 void get_size(unsigned long *len, void *list);
 
