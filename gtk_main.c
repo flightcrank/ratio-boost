@@ -39,7 +39,7 @@ int main (int argc, char *argv[]) {
 	builder = gtk_builder_new();
 	gtk_builder_add_from_file(builder, "ratio-boost.glade", NULL);
 	
-	/*connect singnals to callback functions */
+	/*connect signals to callback functions */
 	gtk_builder_connect_signals (builder, NULL);
         
     timer = g_timer_new();
@@ -62,7 +62,7 @@ void countdown() {
     
     elapsed = g_timer_elapsed(timer, NULL);//time elapse
 	int upload_val = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(upload_field));
-    uploaded += 1024 * upload_val;//add amount uplaoded in bytes
+    uploaded += 1024 * upload_val;//add amount uploaded in bytes
 	float mb = (float)(uploaded / 1024) / 1024;
 	g_string_printf(output, "<b>Update Interval: </b> %d\n<b>Seeders: </b> %d\n<b>Leeches: </b> %d\n<b>Uploaded (MB): </b>%.2f\n<b>Next Update: </b>%.0f", resp.interval, resp.complete, resp.incomplete, mb, resp.interval - elapsed);
 	gtk_label_set_markup(GTK_LABEL(output_label), output->str);
@@ -107,10 +107,10 @@ void tracker_connect() {
 
 	if (curl_handle == NULL) {
 		
-		gtk_message_dialog_set_markup(GTK_MESSAGE_DIALOG(message), "CURL failed to initialse: NULL handle");
+		gtk_message_dialog_set_markup(GTK_MESSAGE_DIALOG(message), "CURL failed to initialize: NULL handle");
 		gtk_dialog_run(GTK_DIALOG(message));
 		gtk_widget_hide(GTK_WIDGET(message));
-		printf("Curl failed to initialise: NULL handel");
+		printf("Curl failed to initialize: NULL Handel");
 	}
 	
 	curl_easy_setopt(curl_handle, CURLOPT_URL, request);
@@ -123,10 +123,10 @@ void tracker_connect() {
 	
 	if (resp.failure[0] != 0) {
 		
-		gtk_message_dialog_set_markup(GTK_MESSAGE_DIALOG(message), "Tracker responce failure");
+		gtk_message_dialog_set_markup(GTK_MESSAGE_DIALOG(message), "Tracker response failure");
 		gtk_dialog_run(GTK_DIALOG(message));
 		gtk_widget_hide(GTK_WIDGET(message));
-		printf("responce failure: %s\n", resp.failure);
+		printf("response failure: %s\n", resp.failure);
 		
 	} else {
 		
@@ -152,13 +152,13 @@ void send_request(GtkButton *button, gpointer user_data) {
 	if (strcmp(button_label, "Connect") == 0) {
 		
 		GString *output = g_string_new("");
-		gtk_spinner_start(GTK_SPINNER(spinner));//start the spinning animation widgit
+		gtk_spinner_start(GTK_SPINNER(spinner));//start the spinning animation widget
 		gtk_button_set_label(GTK_BUTTON(connect_button), "Disconnect");
 
 		g_string_printf(output, "<b>Update Interval (seconds): </b> %d\n<b>Seeders: </b> %d\n<b>Leeches: </b> %d\n<b>Uploaded (MB): </b>%ld\n<b>Next Update</b>", resp.interval, resp.complete, resp.incomplete, uploaded);
 		gtk_label_set_markup(GTK_LABEL(output_label), output->str);
 
-		//prepare the URL, and query string needed for a correct tracker responce.
+		//prepare the URL, and query string needed for a correct tracker response.
 		sprintf(request, "%s?info_hash=%s&peer_id=%s&port=51413&uploaded=0&downloaded=%lu&left=0&event=started&numwant=1&compact=1", info.url, e_hash, e_peer_id, info.size);	
 	
 		tracker_connect(&resp);
@@ -174,8 +174,8 @@ void send_request(GtkButton *button, gpointer user_data) {
 		gtk_spinner_stop(GTK_SPINNER(spinner));
 		gtk_button_set_label(GTK_BUTTON(connect_button), "Connect");
         g_timer_stop(timer);
-		g_source_remove(id); //stop function from executing at regualr intervals	
-		g_source_remove(timer_id); //stop function from executing at regualr intervals	
+		g_source_remove(id); //stop function from executing at regular intervals	
+		g_source_remove(timer_id); //stop function from executing at regular intervals	
 		uploaded = 0; //reset upload amount
 	}
 }
@@ -206,7 +206,7 @@ void open_file(GtkFileChooser *fc, gpointer data) {
 		gtk_message_dialog_set_markup(GTK_MESSAGE_DIALOG(message), "Invalid torrent file");
 		gtk_dialog_run(GTK_DIALOG(message));
 		gtk_widget_hide(GTK_WIDGET(message));
-		printf("invalid torrent file or bencoded responce.\n");
+		printf("invalid torrent file or encoded response.\n");
 	}
 
 	//close file
