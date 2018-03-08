@@ -9,7 +9,7 @@
 
 void destroy (GtkWidget*, gpointer);
 void open_file(GtkFileChooser *fc, gpointer data);
-void send_request(GtkButton *button, gpointer data);
+int send_request(GtkButton *button, gpointer data);
 void tracker_connect();
 
 struct torrent info = {{0}, {0}, {0}, 0};
@@ -48,6 +48,7 @@ int main (int argc, char *argv[]) {
 	gtk_main();
 	
     g_timer_destroy(timer);
+	
 	//free memory used by the curl easy interface
 	curl_easy_cleanup(curl_handle);
 	
@@ -59,10 +60,10 @@ void countdown() {
 	GObject *upload_field = gtk_builder_get_object(builder, "upload_value");
 	GObject *output_label = gtk_builder_get_object(builder, "output_data");
 	GString *output = g_string_new("");
-    
-    elapsed = g_timer_elapsed(timer, NULL);//time elapse
 	int upload_val = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(upload_field));
-    uploaded += 1024 * upload_val;//add amount uploaded in bytes
+    
+    elapsed = g_timer_elapsed(timer, NULL);	//time elapse since timer has started
+    uploaded += 1024 * upload_val;			//add amount uploaded in bytes
 	float mb = (float)(uploaded / 1024) / 1024;
 	g_string_printf(output, "<b>Update Interval: </b> %d\n<b>Seeders: </b> %d\n<b>Leeches: </b> %d\n<b>Uploaded (MB): </b>%.2f\n<b>Next Update: </b>%.0f", resp.interval, resp.complete, resp.incomplete, mb, resp.interval - elapsed);
 	gtk_label_set_markup(GTK_LABEL(output_label), output->str);
@@ -141,14 +142,24 @@ void tracker_connect() {
 	}
 }
 
-void send_request(GtkButton *button, gpointer user_data) {
+int send_request(GtkButton *button, gpointer user_data) {
 
 	GObject *connect_button = gtk_builder_get_object(builder, "connect");
 	GObject *output_label = gtk_builder_get_object(builder, "output_data");
 	GObject *spinner = gtk_builder_get_object(builder, "spinner");
-
+	GObject *message = gtk_builder_get_object(builder, "messagedialog1");
 	const gchar *button_label = gtk_button_get_label(GTK_BUTTON(connect_button));
-
+	
+	//no torrent file selected exit function
+	if (info.info_hash[0] == 0) {
+		
+		gtk_message_dialog_set_markup(GTK_MESSAGE_DIALOG(message), "Please select a vaild torrent file");
+		gtk_dialog_run(GTK_DIALOG(message));
+		gtk_widget_hide(GTK_WIDGET(message));
+		
+		return 1;
+	}
+	
 	if (strcmp(button_label, "Connect") == 0) {
 		
 		GString *output = g_string_new("");
@@ -163,10 +174,13 @@ void send_request(GtkButton *button, gpointer user_data) {
 	
 		tracker_connect(&resp);
 		
-		//execute function at regular intervals
+		//execute tracker connect function at regular intervals
 		id = g_timeout_add_seconds(resp.interval, (GSourceFunc)tracker_connect, NULL);
         
-        g_timer_start(timer);
+		//start countdown timer for for the tracker_connect function to execute
+        g_timer_start(timer); 
+		
+		//execute countdown fucntion to execute ever second to update GUI labels
 		timer_id = g_timeout_add_seconds(1, (GSourceFunc)countdown, NULL);
 		
 	} else { //Disconnect procedure
@@ -174,10 +188,12 @@ void send_request(GtkButton *button, gpointer user_data) {
 		gtk_spinner_stop(GTK_SPINNER(spinner));
 		gtk_button_set_label(GTK_BUTTON(connect_button), "Connect");
         g_timer_stop(timer);
-		g_source_remove(id); //stop function from executing at regular intervals	
-		g_source_remove(timer_id); //stop function from executing at regular intervals	
-		uploaded = 0; //reset upload amount
+		g_source_remove(id); 		//stop function from executing at regular intervals	
+		g_source_remove(timer_id);	//stop function from executing at regular intervals	
+		uploaded = 0; 				//reset upload amount
 	}
+	
+	return 0;
 }
 
 void open_file(GtkFileChooser *fc, gpointer data) {
@@ -227,12 +243,14 @@ void open_file(GtkFileChooser *fc, gpointer data) {
 	p_id[0] = '\0';
 	client[8] = '\0';
 	
+	//copy bencoded torrent info hash into a more human readable format
 	for(i = 0; i < 20; i++) {
 		
 		sprintf(val, "%02X", info.info_hash[i]);
 		strncat(torrent_hash, val, 2);
 	}	
 	
+	//copy bencoded torrent peer id into a more human readable format
 	for(i = 8; i < 20; i++) {
 	
 		sprintf(val, "%02X", info.peer_id[i]);

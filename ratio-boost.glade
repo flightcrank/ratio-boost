@@ -76,6 +76,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="filter">filefilter1</property>
+                <property name="title" translatable="yes">Select a Torrent File</property>
                 <signal name="file-set" handler="open_file" swapped="no"/>
               </object>
               <packing>
@@ -382,7 +383,8 @@
   </object>
   <object class="GtkMessageDialog" id="messagedialog1">
     <property name="can_focus">False</property>
-    <property name="type_hint">dialog</property>
+    <property name="type_hint">normal</property>
+    <property name="transient_for">window1</property>
     <property name="buttons">ok</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="messagedialog-vbox">
