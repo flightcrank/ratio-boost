@@ -423,7 +423,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="Client">
+      <object class="GtkMenuItem" id="client">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="tooltip_text" translatable="yes">Change the torrent client that gets reported to the tracker</property>

@@ -101,17 +101,21 @@ void show_popup(GtkWidget *widget, GdkEvent *event) {
 	GObject *menu = gtk_builder_get_object(builder, "popup_menu");
 	GObject *dialog = gtk_builder_get_object(builder, "update_dialog");
 	GObject *update = gtk_builder_get_object(builder, "update");
+	GObject *client = gtk_builder_get_object(builder, "client");
 	GdkEventButton *bevent = (GdkEventButton *) event;
   
 	//disable the update option in the popup menu no torrent has been selected
 	if (info.info_hash[0] == 0) {
 		
 		gtk_widget_set_sensitive(GTK_WIDGET(update), FALSE);
+		gtk_widget_set_sensitive(GTK_WIDGET(client), FALSE);
 	
 	} else {
 	
 		gtk_widget_set_sensitive(GTK_WIDGET(update), TRUE);
+		gtk_widget_set_sensitive(GTK_WIDGET(client), TRUE);
 	}
+	
 		
     //right click
    if (bevent->button == 3) {  
