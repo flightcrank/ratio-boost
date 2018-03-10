@@ -487,8 +487,8 @@
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
+        <property name="hexpand">False</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">2</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area1">
             <property name="can_focus">False</property>
@@ -521,12 +521,11 @@
           <object class="GtkBox" id="box1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="orientation">vertical</property>
-            <property name="spacing">5</property>
             <child>
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
                 <property name="label" translatable="yes">Update Interval</property>
                 <property name="ellipsize">end</property>
               </object>
@@ -541,6 +540,10 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="tooltip_text" translatable="yes">Change the frequency that the tracker is updated</property>
+                <property name="halign">center</property>
+                <property name="margin_top">10</property>
+                <property name="margin_bottom">10</property>
+                <property name="hexpand">True</property>
                 <property name="max_length">4</property>
                 <property name="input_purpose">digits</property>
                 <property name="adjustment">update_adj</property>
@@ -548,14 +551,14 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
+                <property name="padding">5</property>
                 <property name="position">1</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
+            <property name="expand">True</property>
             <property name="fill">True</property>
-            <property name="padding">10</property>
             <property name="position">0</property>
           </packing>
         </child>

@@ -11,10 +11,6 @@ that 100% of the file has already been downloaded.
 
 This program is dependant on GTK, openssh and libcurl libs installed on your system
 
-BUGS:
-there are some torrent files which trip up the program when calculating the info hash. I am not sure why. but it works with most torrent files.
-if you find one that trips it up, just locate other ones that do work to spoof your ratio.
-
 to compile GTK GUI version with GCC
 
     gcc blex.c hash.c list.c urle.c gtk_main.c -lcrypto -lcurl -export-dynamic `pkg-config gtk+-3.0 --cflags --libs` -o app

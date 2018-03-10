@@ -99,7 +99,6 @@ void show_about(GtkWidget *widget, GdkEvent *event) {
 void show_popup(GtkWidget *widget, GdkEvent *event) {
 
 	GObject *menu = gtk_builder_get_object(builder, "popup_menu");
-	GObject *dialog = gtk_builder_get_object(builder, "update_dialog");
 	GObject *update = gtk_builder_get_object(builder, "update");
 	GObject *client = gtk_builder_get_object(builder, "client");
 	GdkEventButton *bevent = (GdkEventButton *) event;
@@ -115,7 +114,6 @@ void show_popup(GtkWidget *widget, GdkEvent *event) {
 		gtk_widget_set_sensitive(GTK_WIDGET(update), TRUE);
 		gtk_widget_set_sensitive(GTK_WIDGET(client), TRUE);
 	}
-	
 		
     //right click
    if (bevent->button == 3) {  
@@ -349,7 +347,7 @@ void convert_to_hex() {
 	//reset the output display strings so they don't get concatenated every time the function is called
 	output_hash[0] = 0;
 	output_peer_id[0] = 0;
-	strncpy(output_peer_id, info.peer_id , 8);
+	strncpy(output_peer_id, (char *) info.peer_id , 8);
 	output_peer_id[8] = 0;//strncpy will not add a null byte so add one
 	
 	//copy bencoded torrent info hash into a more human readable format

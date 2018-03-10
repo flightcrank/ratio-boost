@@ -16,6 +16,7 @@ int load_torrent_info(FILE *file_name, struct torrent *tdata) {
 
 	if (v == 1) {
 		
+		printf("validation of linked list failed");
 		return 1;
 	}
 
@@ -226,7 +227,7 @@ int get_info_hash(FILE *file, void *list, unsigned char *hash) {
 	unsigned char c = fgetc(file);
 	int info_size = end - start;
 
-	unsigned char *info_value = malloc(info_size + 1);
+	unsigned char *info_value = (unsigned char *) calloc(info_size + 1, sizeof(unsigned char));
 	
 	//set file start position
 	fseek(file, start, SEEK_SET);
@@ -242,7 +243,7 @@ int get_info_hash(FILE *file, void *list, unsigned char *hash) {
 		//reached end position
 		if (pos == end) {
 			
-			info_value[i + 1] = '\0';
+			//info_value[i + 1] = '\0'; //fails with malloc must be accessing 1 element out size of allocated memory
 			break;
 		}
 		
@@ -250,9 +251,8 @@ int get_info_hash(FILE *file, void *list, unsigned char *hash) {
 		i++;
 	}
 	
-	
 	SHA1(info_value, info_size + 1, hash);
-	free(info_value);
+	free(info_value); 
 
 	return 0; 
 }
