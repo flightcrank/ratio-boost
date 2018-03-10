@@ -434,9 +434,20 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
+              <object class="GtkMenuItem" id="ktorrent4">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="tooltip_text" translatable="yes">funfile.org accepts this older version</property>
+                <property name="label" translatable="yes">KTorrent 4.1.2</property>
+                <property name="use_underline">True</property>
+                <signal name="activate" handler="change_client" swapped="no"/>
+              </object>
+            </child>
+            <child>
               <object class="GtkMenuItem" id="ktorrent">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="tooltip_text" translatable="yes">funfile.org rejects this client, who knows why</property>
                 <property name="label" translatable="yes">KTorrent 5.1.0</property>
                 <property name="use_underline">True</property>
                 <signal name="activate" handler="change_client" swapped="no"/>

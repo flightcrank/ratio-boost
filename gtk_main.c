@@ -31,6 +31,7 @@ double elapsed = 0;
 FILE *torrent_file;
 char user_update_flag = 0;
 int user_update = 0;
+char running = 0;
 guint timer_id = 0;
 GTimer *timer = NULL;
 
@@ -168,6 +169,11 @@ void change_client(GtkMenuItem *item, GdkEvent *event) {
 		
 		info.peer_id[0] = '-'; info.peer_id[1] = 'T'; info.peer_id[2] = 'R'; info.peer_id[3] = '2';
 		info.peer_id[4] = '8'; info.peer_id[5] = '2'; info.peer_id[6] = '0'; info.peer_id[7] = '-';
+	
+	} else if (strcmp(name, "KTorrent 4.1.2") == 0) {
+	
+		info.peer_id[0] = '-'; info.peer_id[1] = 'K'; info.peer_id[2] = 'T'; info.peer_id[3] = '4';
+		info.peer_id[4] = '1'; info.peer_id[5] = '2'; info.peer_id[6] = '0'; info.peer_id[7] = '-';
 	}
 	
 	//re-encode urlencode the peer_id now that the client has been changed
@@ -185,6 +191,8 @@ void change_client(GtkMenuItem *item, GdkEvent *event) {
 //perform connection to the torrent tracker
 void tracker_connect() {
 
+	GObject *connect_button = gtk_builder_get_object(builder, "connect");
+	GObject *spinner = gtk_builder_get_object(builder, "spinner");
 	GObject *download_field = gtk_builder_get_object(builder, "download_value");
 	GObject *output_label = gtk_builder_get_object(builder, "output_data");
 	GObject *message = gtk_builder_get_object(builder, "messagedialog1");
@@ -213,10 +221,19 @@ void tracker_connect() {
 	
 	if (resp.failure[0] != 0) {
 		
-		gtk_message_dialog_set_markup(GTK_MESSAGE_DIALOG(message), "Tracker response failure");
+		gtk_message_dialog_set_markup(GTK_MESSAGE_DIALOG(message), "Tracker response failure: see console output for more info");
 		gtk_dialog_run(GTK_DIALOG(message));
 		gtk_widget_hide(GTK_WIDGET(message));
 		printf("response failure: %s\n", resp.failure);
+		
+		//stop running due to tracker responding with a failure
+		running = 0;
+		gtk_spinner_stop(GTK_SPINNER(spinner));
+		gtk_button_set_label(GTK_BUTTON(connect_button), "Connect");
+        g_timer_stop(timer);
+		g_source_remove(timer_id);	//stop function from executing at regular intervals	
+		uploaded = 0; 				//reset upload amount
+		
 		
 	} else {
 		
@@ -239,10 +256,9 @@ void tracker_connect() {
 int send_request(GtkButton *button, gpointer user_data) {
 
 	GObject *connect_button = gtk_builder_get_object(builder, "connect");
-	GObject *output_label = gtk_builder_get_object(builder, "output_data");
 	GObject *spinner = gtk_builder_get_object(builder, "spinner");
+	GObject *output_label = gtk_builder_get_object(builder, "output_data");
 	GObject *message = gtk_builder_get_object(builder, "messagedialog1");
-	const gchar *button_label = gtk_button_get_label(GTK_BUTTON(connect_button));
 	
 	//no torrent file selected exit function
 	if (info.info_hash[0] == 0) {
@@ -254,8 +270,10 @@ int send_request(GtkButton *button, gpointer user_data) {
 		return 1;
 	}
 	
-	if (strcmp(button_label, "Connect") == 0) {
+	//running flag, = 0 not running else = running
+	if (running == 0) {
 		
+		running = 1;
 		GString *output = g_string_new("");
 		gtk_spinner_start(GTK_SPINNER(spinner));//start the spinning animation widget
 		gtk_button_set_label(GTK_BUTTON(connect_button), "Disconnect");
@@ -275,7 +293,8 @@ int send_request(GtkButton *button, gpointer user_data) {
 		timer_id = g_timeout_add_seconds(1, (GSourceFunc)countdown, NULL);
 		
 	} else { //Disconnect procedure
-	
+		
+		running = 0;
 		gtk_spinner_stop(GTK_SPINNER(spinner));
 		gtk_button_set_label(GTK_BUTTON(connect_button), "Connect");
         g_timer_stop(timer);
