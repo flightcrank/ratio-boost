@@ -101,21 +101,147 @@
             <property name="label_xalign">0</property>
             <property name="shadow_type">in</property>
             <child>
-              <object class="GtkLabel" id="input_data">
+              <object class="GtkBox" id="box2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">start</property>
-                <property name="valign">start</property>
                 <property name="margin_left">5</property>
                 <property name="margin_right">5</property>
                 <property name="margin_top">5</property>
                 <property name="margin_bottom">5</property>
-                <property name="xpad">5</property>
-                <property name="label" translatable="yes">&lt;b&gt;Info Hash: &lt;/b&gt;
-&lt;b&gt;Peer ID: &lt;/b&gt;
-&lt;b&gt;Size: &lt;/b&gt;</property>
-                <property name="use_markup">True</property>
-                <property name="ellipsize">end</property>
+                <property name="hexpand">True</property>
+                <property name="spacing">5</property>
+                <child>
+                  <object class="GtkBox" id="box3">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkLabel" id="label2">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">&lt;b&gt;Info Hash:&lt;/b&gt;</property>
+                        <property name="use_markup">True</property>
+                        <property name="angle">0.059999999999999998</property>
+                        <property name="lines">1</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label3">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">&lt;b&gt;Peer ID:&lt;/b&gt;</property>
+                        <property name="use_markup">True</property>
+                        <property name="ellipsize">start</property>
+                        <property name="xalign">1</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label4">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">&lt;b&gt;Size:&lt;/b&gt;</property>
+                        <property name="use_markup">True</property>
+                        <property name="ellipsize">start</property>
+                        <property name="xalign">1</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label5">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">&lt;b&gt;Tracker:&lt;/b&gt;</property>
+                        <property name="use_markup">True</property>
+                        <property name="xalign">1</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">3</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="box4">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkLabel" id="input_info_hash">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="input_peer_id">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="input_size">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="input_url">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="ellipsize">start</property>
+                        <property name="xalign">0</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">3</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
               </object>
             </child>
             <child type="label">
@@ -141,22 +267,169 @@
             <property name="label_xalign">2.2351741291171123e-10</property>
             <property name="shadow_type">in</property>
             <child>
-              <object class="GtkLabel" id="output_data">
+              <object class="GtkBox" id="box5">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">start</property>
-                <property name="valign">start</property>
                 <property name="margin_left">5</property>
                 <property name="margin_right">5</property>
                 <property name="margin_top">5</property>
                 <property name="margin_bottom">5</property>
-                <property name="xpad">5</property>
-                <property name="label" translatable="yes">&lt;b&gt;Update Interval:&lt;/b&gt; 
-&lt;b&gt;Seeders:&lt;/b&gt; 
-&lt;b&gt;Leeches:&lt;/b&gt; 
-&lt;b&gt;Uploaded:&lt;/b&gt;
-&lt;b&gt;Next update:&lt;/b&gt;</property>
-                <property name="use_markup">True</property>
+                <property name="spacing">5</property>
+                <child>
+                  <object class="GtkBox" id="box6">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkLabel" id="label8">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">&lt;b&gt;Update Interval:&lt;/b&gt;</property>
+                        <property name="use_markup">True</property>
+                        <property name="lines">1</property>
+                        <property name="xalign">1</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label9">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">&lt;b&gt;Seeders:&lt;/b&gt;</property>
+                        <property name="use_markup">True</property>
+                        <property name="xalign">1</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label10">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">&lt;b&gt;Leechers:&lt;/b&gt;</property>
+                        <property name="use_markup">True</property>
+                        <property name="xalign">1</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label11">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">&lt;b&gt;Uploaded:&lt;/b&gt;</property>
+                        <property name="use_markup">True</property>
+                        <property name="xalign">1</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label16">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">&lt;b&gt;Next Update:&lt;/b&gt;</property>
+                        <property name="use_markup">True</property>
+                        <property name="xalign">1</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">4</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="box7">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkLabel" id="output_update_interval">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="output_seeders">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="output_leechers">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="output_uploaded">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="output_next_update">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">4</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
               </object>
             </child>
             <child type="label">
@@ -406,6 +679,39 @@
         </child>
       </object>
     </child>
+  </object>
+  <object class="GtkLabel" id="input_data">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="halign">start</property>
+    <property name="valign">start</property>
+    <property name="margin_left">5</property>
+    <property name="margin_right">5</property>
+    <property name="margin_top">5</property>
+    <property name="margin_bottom">5</property>
+    <property name="xpad">5</property>
+    <property name="label" translatable="yes">&lt;b&gt;Info Hash: &lt;/b&gt;
+&lt;b&gt;Peer ID: &lt;/b&gt;
+&lt;b&gt;Size: &lt;/b&gt;</property>
+    <property name="use_markup">True</property>
+    <property name="ellipsize">end</property>
+  </object>
+  <object class="GtkLabel" id="output_data">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="halign">start</property>
+    <property name="valign">start</property>
+    <property name="margin_left">5</property>
+    <property name="margin_right">5</property>
+    <property name="margin_top">5</property>
+    <property name="margin_bottom">5</property>
+    <property name="xpad">5</property>
+    <property name="label" translatable="yes">&lt;b&gt;Update Interval:&lt;/b&gt; 
+&lt;b&gt;Seeders:&lt;/b&gt; 
+&lt;b&gt;Leeches:&lt;/b&gt; 
+&lt;b&gt;Uploaded:&lt;/b&gt;
+&lt;b&gt;Next update:&lt;/b&gt;</property>
+    <property name="use_markup">True</property>
   </object>
   <object class="GtkMenu" id="popup_menu">
     <property name="visible">True</property>
