@@ -9,9 +9,10 @@ an emulator or virtual machine seems overkill for a simple program such as this.
 this program can also spoof downloads but that functionality isn't included for now, as it is not needed. the program will report to the tracker
 that 100% of the file has already been downloaded.
 
-This program is dependant on GTK, openssh and libcurl libs installed on your system
+This program is dependency's on GTK, openssh and libcurl libs installed on your system as well as posix regex.h. It should compile on Windows and Mac. it is up to the user
+to install these dependency's and compilation instructions for those operating systems
 
-to compile GTK GUI version with GCC
+to compile GTK GUI version with GCC on a Linux system
 
     gcc blex.c hash.c list.c urle.c gtk_main.c -lcrypto -lcurl -export-dynamic `pkg-config gtk+-3.0 --cflags --libs` -o app
 
