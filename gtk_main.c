@@ -86,7 +86,7 @@ void countdown() {
 	g_string_printf(output, "%.0f", user_update - elapsed);
 	gtk_label_set_text(GTK_LABEL(label_update), output->str);
 	
-	//countdown timer has reached 0 send data to toreent tracker
+	//countdown timer has reached 0 send data to torrent tracker
 	if (user_update - elapsed <= 0) {
 		
 		tracker_connect();
@@ -323,20 +323,34 @@ int open_file(GtkFileChooser *fc, gpointer data) {
 	GObject *message = gtk_builder_get_object(builder, "messagedialog1");
 	char *str = gtk_file_chooser_get_filename(fc);
 
+	//check that the program isnt already running a spoofing torrent
+	if(running != 0) {
+		
+		gtk_message_dialog_set_markup(GTK_MESSAGE_DIALOG(message), "Session in progress. Please disconnect from current tracker before opening a new torrent");
+		gtk_dialog_run(GTK_DIALOG(message));
+		gtk_widget_hide(GTK_WIDGET(message));
+		
+		return 1;
+	}
+	
 	//Open torrent file for processing
 	torrent_file = fopen(str, "rb");	
-		
+
+	//check fopen() could open the file
 	if (torrent_file == 0) {
 
 		gtk_message_dialog_set_markup(GTK_MESSAGE_DIALOG(message), "Error opening file");
 		gtk_dialog_run(GTK_DIALOG(message));
 		gtk_widget_hide(GTK_WIDGET(message));
 		printf("Error opening file\n");
+		
+		return 1;
 	}
 	
 	//Load all the required information found in the torrent file to a torrent structure
 	int ti = load_torrent_info(torrent_file, &info);
 	
+	//check for vaild torrent file
 	if (ti != 0) {
 		
 		gtk_message_dialog_set_markup(GTK_MESSAGE_DIALOG(message), "Invalid torrent file");
@@ -442,7 +456,8 @@ int regex_url() {
 	} else if (reti == REG_NOMATCH) {
 		
 		puts("No match: regex expression could not match the url");
-		output_url = "unknowen"
+		sprintf(output_url, "unknown");
+		
 	}
 	
 	// Free memory allocated to the pattern buffer by regcomp() 

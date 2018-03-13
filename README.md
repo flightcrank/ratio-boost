@@ -19,7 +19,7 @@ to compile GTK GUI version with GCC on a Linux system
 This program is still under development
 
 ## Images (GTK version)
-![animation](https://i.imgur.com/uY6znXG.gif)
+![animation](https://i.imgur.com/MDSNu3Q.gif)
 
 ![spoofed ratio result](https://i.imgur.com/ApvQTT2.png)
 

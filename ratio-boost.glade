@@ -114,6 +114,7 @@
                   <object class="GtkBox" id="box3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="margin_left">5</property>
                     <property name="orientation">vertical</property>
                     <child>
                       <object class="GtkLabel" id="label2">
@@ -149,7 +150,7 @@
                       <object class="GtkLabel" id="label4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">&lt;b&gt;Size:&lt;/b&gt;</property>
+                        <property name="label" translatable="yes">&lt;b&gt;Size (MB):&lt;/b&gt;</property>
                         <property name="use_markup">True</property>
                         <property name="ellipsize">start</property>
                         <property name="xalign">1</property>
@@ -279,6 +280,7 @@
                   <object class="GtkBox" id="box6">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="margin_left">5</property>
                     <property name="orientation">vertical</property>
                     <child>
                       <object class="GtkLabel" id="label8">
@@ -327,7 +329,7 @@
                       <object class="GtkLabel" id="label11">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">&lt;b&gt;Uploaded:&lt;/b&gt;</property>
+                        <property name="label" translatable="yes">&lt;b&gt;Uploaded (MB):&lt;/b&gt;</property>
                         <property name="use_markup">True</property>
                         <property name="xalign">1</property>
                       </object>
@@ -679,39 +681,6 @@
         </child>
       </object>
     </child>
-  </object>
-  <object class="GtkLabel" id="input_data">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="halign">start</property>
-    <property name="valign">start</property>
-    <property name="margin_left">5</property>
-    <property name="margin_right">5</property>
-    <property name="margin_top">5</property>
-    <property name="margin_bottom">5</property>
-    <property name="xpad">5</property>
-    <property name="label" translatable="yes">&lt;b&gt;Info Hash: &lt;/b&gt;
-&lt;b&gt;Peer ID: &lt;/b&gt;
-&lt;b&gt;Size: &lt;/b&gt;</property>
-    <property name="use_markup">True</property>
-    <property name="ellipsize">end</property>
-  </object>
-  <object class="GtkLabel" id="output_data">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="halign">start</property>
-    <property name="valign">start</property>
-    <property name="margin_left">5</property>
-    <property name="margin_right">5</property>
-    <property name="margin_top">5</property>
-    <property name="margin_bottom">5</property>
-    <property name="xpad">5</property>
-    <property name="label" translatable="yes">&lt;b&gt;Update Interval:&lt;/b&gt; 
-&lt;b&gt;Seeders:&lt;/b&gt; 
-&lt;b&gt;Leeches:&lt;/b&gt; 
-&lt;b&gt;Uploaded:&lt;/b&gt;
-&lt;b&gt;Next update:&lt;/b&gt;</property>
-    <property name="use_markup">True</property>
   </object>
   <object class="GtkMenu" id="popup_menu">
     <property name="visible">True</property>
