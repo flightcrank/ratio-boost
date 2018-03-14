@@ -56,7 +56,7 @@ int main (int argc, char *argv[]) {
 	gtk_builder_connect_signals (builder, NULL);
         
     timer = g_timer_new();
-    
+	
     //main program loop	
 	gtk_main();
 	
@@ -78,6 +78,8 @@ void countdown() {
 	int upload_val = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(upload_field));
     
     elapsed = g_timer_elapsed(timer, NULL);	//time elapse since timer has started
+	
+	printf("%f\n", elapsed);
     
 	uploaded += 1024 * upload_val;			//add amount uploaded in bytes
 	float mb = (float)(uploaded / 1024) / 1024;
@@ -203,6 +205,7 @@ void tracker_connect() {
 	GObject *message = gtk_builder_get_object(builder, "messagedialog1");
 	int download_val = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(download_field));
 	
+		
 	//prepare the URL, and query string needed for a correct tracker response.
 	sprintf(request, "%s?info_hash=%s&peer_id=%s&port=51413&uploaded=%ld&downloaded=%lu&left=0&event=&numwant=1&compact=1", info.url, e_hash, e_peer_id, uploaded, info.size);	
 	
@@ -224,7 +227,7 @@ void tracker_connect() {
 	load_responce_info(output_file, &resp);
 	fclose(output_file);
 	
-	if (resp.failure[0] != 0) {
+	if (resp.failure[0] != '\0') {
 		
 		gtk_message_dialog_set_markup(GTK_MESSAGE_DIALOG(message), "Tracker response failure: see console output for more info");
 		gtk_dialog_run(GTK_DIALOG(message));
@@ -263,6 +266,7 @@ void tracker_connect() {
 		printf("seeders = %d leeches = %d update interval = %d uploaded = %.2f\n",resp.complete, resp.incomplete, user_update, mb);
         g_timer_start(timer);//reset the countdown timer
 	}
+	
 }
 
 //connect button is clicked
@@ -271,6 +275,9 @@ int send_request(GtkButton *button, gpointer user_data) {
 	GObject *connect_button = gtk_builder_get_object(builder, "connect");
 	GObject *spinner = gtk_builder_get_object(builder, "spinner");
 	GObject *message = gtk_builder_get_object(builder, "messagedialog1");
+	GObject *win = gtk_builder_get_object(builder, "window1");
+	GdkWindow *w = gtk_widget_get_window(GTK_WIDGET(win));
+	GdkCursor *busy_cursor = gdk_cursor_new_from_name (gdk_display_get_default(), "progress");
 	
 	//no torrent file selected exit function
 	if (info.info_hash[0] == 0) {
@@ -281,6 +288,7 @@ int send_request(GtkButton *button, gpointer user_data) {
 		
 		return 1;
 	}
+
 	
 	//running flag, = 0 not running else = running
 	if (running == 0) {
@@ -291,8 +299,21 @@ int send_request(GtkButton *button, gpointer user_data) {
 
 		//prepare the URL, and query string needed for a correct tracker response.
 		sprintf(request, "%s?info_hash=%s&peer_id=%s&port=51413&uploaded=0&downloaded=%lu&left=0&event=started&numwant=1&compact=1", info.url, e_hash, e_peer_id, info.size);	
-	
+		
+		//change cursor to a busy symbol as the http request from libcurl can take some time to recieve a responce
+		gdk_window_set_cursor(w, busy_cursor);	
+		
+		//this while loop allows the gtk main loop to update the cursor before time intensive computations take place
+		while (gtk_events_pending()) {
+			
+			gtk_main_iteration();//runs one iteration of the main loop to update the cursor
+		}
+		
+		//connect to tracker via libcurl
 		tracker_connect(&resp);
+	
+		//reset cursor back to default
+		gdk_window_set_cursor(w, NULL);
 		
 		//start countdown timer for the tracker_connect function to execute
         g_timer_start(timer); 
@@ -309,6 +330,7 @@ int send_request(GtkButton *button, gpointer user_data) {
 		g_source_remove(timer_id);	//stop function from executing at regular intervals	
 		uploaded = 0; 				//reset upload amount
 	}
+	
 	
 	return 0;
 }
