@@ -79,8 +79,6 @@ void countdown() {
     
     elapsed = g_timer_elapsed(timer, NULL);	//time elapse since timer has started
 	
-	printf("%f\n", elapsed);
-    
 	uploaded += 1024 * upload_val;			//add amount uploaded in bytes
 	float mb = (float)(uploaded / 1024) / 1024;
 	g_string_printf(output, "%.2f", mb);
@@ -205,7 +203,6 @@ void tracker_connect() {
 	GObject *message = gtk_builder_get_object(builder, "messagedialog1");
 	int download_val = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(download_field));
 	
-		
 	//prepare the URL, and query string needed for a correct tracker response.
 	sprintf(request, "%s?info_hash=%s&peer_id=%s&port=51413&uploaded=%ld&downloaded=%lu&left=0&event=&numwant=1&compact=1", info.url, e_hash, e_peer_id, uploaded, info.size);	
 	
@@ -266,7 +263,6 @@ void tracker_connect() {
 		printf("seeders = %d leeches = %d update interval = %d uploaded = %.2f\n",resp.complete, resp.incomplete, user_update, mb);
         g_timer_start(timer);//reset the countdown timer
 	}
-	
 }
 
 //connect button is clicked
@@ -288,7 +284,6 @@ int send_request(GtkButton *button, gpointer user_data) {
 		
 		return 1;
 	}
-
 	
 	//running flag, = 0 not running else = running
 	if (running == 0) {
@@ -444,6 +439,7 @@ void convert_to_hex() {
 	}
 }
 
+//extracts the domain url from the torrent announce url found in the torrent file
 int regex_url() {
 
 	//clear url in case it has already been written to. eg open file function has been opened before and written to it
@@ -479,7 +475,6 @@ int regex_url() {
 		
 		puts("No match: regex expression could not match the url");
 		sprintf(output_url, "unknown");
-		
 	}
 	
 	// Free memory allocated to the pattern buffer by regcomp() 
