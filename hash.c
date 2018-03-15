@@ -2,10 +2,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <openssl/sha.h>
+#include <glib.h>
+#include <glib/gi18n.h>
 #include "blex.h"
 #include "hash.h"
 #include "list.h"
+#include "urle.h"
 
 int load_torrent_info(FILE *file_name, struct torrent *tdata) {
 	
@@ -251,8 +253,13 @@ int get_info_hash(FILE *file, void *list, unsigned char *hash) {
 		i++;
 	}
 	
-	SHA1(info_value, info_size + 1, hash);
-	free(info_value); 
+	//set up the type of hashing function we want to use on the info_value array's data
+	gsize size = g_checksum_type_get_length (G_CHECKSUM_SHA1);
+	GChecksum *chksum = g_checksum_new (G_CHECKSUM_SHA1);
+	g_checksum_update(chksum, info_value, info_size + 1);	//execute hashing function on the data
+	g_checksum_get_digest(chksum, (guint8 *) hash, &size);	//store the hash as 8bit integers in a char array (hash)
+	g_checksum_free(chksum);								//free mem used
+	free(info_value); 										//free the calloc'd memory used by info_value used to generate the sha1 hash
 
 	return 0; 
 }
