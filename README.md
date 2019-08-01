@@ -1,6 +1,10 @@
 
 # RATIO-BOOST
 
+This C version is no longer maintained. Instead I ported it to a java which is actively maintained. so users are encouraged to use that version
+
+java version is here https://github.com/flightcrank/JRatioBoost
+
 This program is intended to be used to obtain a good ratio on private torrent trackers.
 It reports to the tracker that you are uploading data when you are not actually uploading anything at all.
 This program was created due to the lack of ratio boosting programs for the Linux operating system. Booting into windows or using
@@ -16,7 +20,7 @@ the compilation instructions with GCC on a Linux system are as follows...
 
     gcc blex.c hash.c list.c urle.c gtk_main.c -lcurl -export-dynamic `pkg-config gtk+-3.0 --cflags --libs` -o ratio-boost
 
-This program has achieved its goal, and is no longer under active devleopment. However minor improvments may still be made
+This program has achieved its goal, and is no longer under active development. However minor improvements may still be made
 
 ## Images (GTK version)
 ![animation](https://i.imgur.com/MDSNu3Q.gif)
