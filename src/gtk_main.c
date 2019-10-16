@@ -4,6 +4,7 @@
 #include <curl/curl.h>
 #include <string.h>
 #include <regex.h>
+#include <unistd.h>
 #include "urle.h"	//encode hash
 #include "hash.h"	//get torrent meta info
 #include "blex.h"	//generate a linked list
@@ -50,17 +51,23 @@ int main (int argc, char *argv[]) {
 	  
 	/* Construct a GtkBuilder instance and load our UI description */
 	builder = gtk_builder_new();
-	gtk_builder_add_from_file(builder, "ratio-boost.glade", NULL);
-	
+	if (access("/usr/share/ratio-boost/ratio-boost.glade", F_OK) != -1)
+		gtk_builder_add_from_file(builder, "/usr/share/ratio-boost/ratio-boost.glade", NULL);
+	else if (access("ratio-boost.glade", F_OK) != -1)
+		gtk_builder_add_from_file(builder, "ratio-boost.glade", NULL);
+	else {
+		dprintf(2, "`ratio-boost.blade` has not been found\n");
+		exit(1);
+	}
 	/*connect signals to callback functions */
 	gtk_builder_connect_signals (builder, NULL);
-        
-    timer = g_timer_new();
+		
+	timer = g_timer_new();
 	
-    //main program loop	
+	//main program loop	
 	gtk_main();
 	
-    g_timer_destroy(timer);
+	g_timer_destroy(timer);
 	
 	//free memory used by the curl easy interface
 	curl_easy_cleanup(curl_handle);
@@ -70,14 +77,14 @@ int main (int argc, char *argv[]) {
 
 //function to run at regular intervals to update labels on the GUI
 void countdown() {
-    
+	
 	GObject *upload_field = gtk_builder_get_object(builder, "upload_value");
 	GObject *label_uploaded = gtk_builder_get_object(builder, "output_uploaded");
 	GObject *label_update = gtk_builder_get_object(builder, "output_next_update");
 	GString *output = g_string_new("");
 	int upload_val = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(upload_field));
-    
-    elapsed = g_timer_elapsed(timer, NULL);	//time elapse since timer has started
+	
+	elapsed = g_timer_elapsed(timer, NULL);	//time elapse since timer has started
 	
 	uploaded += 1024 * upload_val;			//add amount uploaded in bytes
 	float mb = (float)(uploaded / 1024) / 1024;
@@ -95,11 +102,11 @@ void countdown() {
 
 //show about dialog from popup menu
 void show_about(GtkWidget *widget, GdkEvent *event) {
-    
-    GObject *about = gtk_builder_get_object(builder, "about_dialog");
-    
-    gtk_dialog_run(GTK_DIALOG(about));
-    gtk_widget_hide(GTK_WIDGET(about));
+	
+	GObject *about = gtk_builder_get_object(builder, "about_dialog");
+	
+	gtk_dialog_run(GTK_DIALOG(about));
+	gtk_widget_hide(GTK_WIDGET(about));
 }
 
 //show the right click popup menu
@@ -122,10 +129,10 @@ void show_popup(GtkWidget *widget, GdkEvent *event) {
 		gtk_widget_set_sensitive(GTK_WIDGET(client), TRUE);
 	}
 		
-    //right click
+	//right click
    if (bevent->button == 3) {  
-       
-       gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL, bevent->button, bevent->time);
+	   
+	   gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL, bevent->button, bevent->time);
    }
 }
 
@@ -152,7 +159,7 @@ void show_update(GtkWidget *widget, GdkEvent *event) {
 		gtk_label_set_markup(GTK_LABEL(label_interval), output->str);
 		
 		//start countdown timer for the tracker_connect function to execute
-        g_timer_start(timer); 
+		g_timer_start(timer); 
 	}
 	
 	gtk_widget_hide(GTK_WIDGET(dialog));
@@ -235,7 +242,7 @@ void tracker_connect() {
 		running = 0;
 		gtk_spinner_stop(GTK_SPINNER(spinner));
 		gtk_button_set_label(GTK_BUTTON(connect_button), "Connect");
-        g_timer_stop(timer);
+		g_timer_stop(timer);
 		g_source_remove(timer_id);	//stop function from executing at regular intervals	
 		uploaded = 0; 				//reset upload amount
 		
@@ -261,7 +268,7 @@ void tracker_connect() {
 		
 		downloaded += (1024 * resp.interval) * download_val;//in bytes
 		printf("seeders = %d leeches = %d update interval = %d uploaded = %.2f\n",resp.complete, resp.incomplete, user_update, mb);
-        g_timer_start(timer);//reset the countdown timer
+		g_timer_start(timer);//reset the countdown timer
 	}
 }
 
@@ -311,7 +318,7 @@ int send_request(GtkButton *button, gpointer user_data) {
 		gdk_window_set_cursor(w, NULL);
 		
 		//start countdown timer for the tracker_connect function to execute
-        g_timer_start(timer); 
+		g_timer_start(timer); 
 		
 		//execute countdown function to execute ever second to update GUI labels
 		timer_id = g_timeout_add_seconds(1, (GSourceFunc)countdown, NULL);
@@ -321,7 +328,7 @@ int send_request(GtkButton *button, gpointer user_data) {
 		running = 0;
 		gtk_spinner_stop(GTK_SPINNER(spinner));
 		gtk_button_set_label(GTK_BUTTON(connect_button), "Connect");
-        g_timer_stop(timer);
+		g_timer_stop(timer);
 		g_source_remove(timer_id);	//stop function from executing at regular intervals	
 		uploaded = 0; 				//reset upload amount
 	}
